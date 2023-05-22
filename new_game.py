@@ -3,6 +3,7 @@ import random
 import time
 from PIL import Image, ImageTk
 
+
 def set_level(event):
     global level, length
     level = int(level_entry.get())
