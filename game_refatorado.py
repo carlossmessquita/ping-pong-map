@@ -11,9 +11,7 @@ class Game:
         self.root.wm_attributes("-topmost", 1)
         self.canvas = Canvas(self.root, width=800, height=600, bd=0, highlightthickness=0)
         self.canvas.pack()
-        background_image_path = ["background.png", "background-2.png","background-3.jpg",
-                                 "background-4.jpg", "background-5.jpg", "background-6.jpg",
-                                 "background-7.jpg"]
+        background_image_path = ["background.png", "background-2.png"]
         bg_image = Image.open(random.choice(background_image_path))
         self.bg_photo = ImageTk.PhotoImage(bg_image)
         self.canvas.create_image(0, 0, image=self.bg_photo, anchor=NW)
