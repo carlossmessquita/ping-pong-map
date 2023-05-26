@@ -3,6 +3,7 @@ import random
 import time
 from PIL import Image, ImageTk
 
+
 class Game:
     def __init__(self):
         self.root = Tk()
@@ -37,7 +38,8 @@ class Game:
     def init_game(self):
         self.Barra = Barra(self.canvas, "olive", self.length, self)
         self.Bola = Bola(self.canvas, self.Barra, "white", self)
-        self.score_now = self.canvas.create_text(370, 20, text="Você acertou " + str(self.count) + "x", fill="lime", font=("Arial", 20))
+        self.score_now = self.canvas.create_text(370, 20, text="Você acertou " + str(self.count) + "x", fill="lime",
+                                                 font=("Arial", 20))
         self.game = self.canvas.create_text(400, 300, text=" ", fill="white", font=("Arial", 40))
         self.canvas.bind_all("<Button-1>", self.start_game)
         self.start_game()
@@ -57,51 +59,10 @@ class Game:
     def game_over(self):
         self.canvas.itemconfig(self.game, text="Game over!")
 
-class Bola:
-    def __init__(self, canvas, Barra, color, game):
-        self.canvas = canvas
-        self.Barra = Barra
-        self.game = game
-        self.id = canvas.create_oval(0, 0, 15, 15, fill=color)
-        self.canvas.move(self.id, 245, 200)
-
-        starts_x = [-3, -2, -1, 1, 2, 3]
-        random.shuffle(starts_x)
-
-        self.x = starts_x[0]
-        self.y = -3
-        self.canvas_height = self.canvas.winfo_height()
-        self.canvas_width = self.canvas.winfo_width()
-
-    def draw(self):
-        self.canvas.move(self.id, self.x, self.y)
-        pos = self.canvas.coords(self.id)
-
-        if pos[1] <= 0:
-            self.y = 3
-        if pos[3] >= self.canvas_height:
-            self.y = -3
-        if pos[0] <= 0:
-            self.x = 3
-        if pos[2] >= self.canvas_width:
-            self.x = -3
-
-        self.Barra_pos = self.canvas.coords(self.Barra.id)
-
-        if pos[2] >= self.Barra_pos[0] and pos[0] <= self.Barra_pos[2]:
-            if pos[3] >= self.Barra_pos[1] and pos[3] <= self.Barra_pos[3]:
-                self.y = -3
-                self.game.count += 1
-                self.game.score()
-        if pos[3] <= self.canvas_height:
-            self.canvas.after(10, self.draw)
-        else:
-            self.game.game_over()
-            self.game.lost = True
-
 
 class Barra:
-    def __init__(self, canvas, color, length, game):
+    def __init__(self, canvas: Canvas, color, length, game: Game):
+        self.pos = None
         self.canvas = canvas
         self.id = self.canvas.create_rectangle(0, 0, length, 10, fill=color)
         self.canvas.move(self.id, 200, 400)
@@ -129,6 +90,49 @@ class Barra:
     def move_right(self, event):
         if self.pos[2] <= self.canvas_width:
             self.x = 3
+
+
+class Bola:
+    def __init__(self, canvas: Canvas, barra: Barra, color, game: Game):
+        self.canvas = canvas
+        self.barra = barra
+        self.game = game
+        self.id = canvas.create_oval(0, 0, 15, 15, fill=color)
+        self.canvas.move(self.id, 245, 200)
+
+        starts_x = [-3, -2, -1, 1, 2, 3]
+        random.shuffle(starts_x)
+
+        self.x = starts_x[0]
+        self.y = -3
+        self.canvas_height = self.canvas.winfo_height()
+        self.canvas_width = self.canvas.winfo_width()
+
+    def draw(self):
+        self.canvas.move(self.id, self.x, self.y)
+        pos = self.canvas.coords(self.id)
+
+        if pos[1] <= 0:
+            self.y = 3
+        if pos[3] >= self.canvas_height:
+            self.y = -3
+        if pos[0] <= 0:
+            self.x = 3
+        if pos[2] >= self.canvas_width:
+            self.x = -3
+
+        barra_pos = self.canvas.coords(self.barra.id)
+
+        if pos[2] >= barra_pos[0] and pos[0] <= barra_pos[2]:
+            if barra_pos[1] <= pos[3] <= barra_pos[3]:
+                self.y = -3
+                self.game.count += 1
+                self.game.score()
+        if pos[3] <= self.canvas_height:
+            self.canvas.after(10, self.draw)
+        else:
+            self.game.game_over()
+            self.game.lost = True
 
 
 game = Game()

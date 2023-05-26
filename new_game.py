@@ -15,8 +15,8 @@ def set_level(event):
 
 def init_game():
     global Barra, Bola, score_now, game
-    Barra = Barra(canvas, "olive")
-    Bola = Bola(canvas, Barra, "white")
+    Barra = Barra(canvas, "red")
+    Bola = Bola(canvas, Barra, "black")
 
     score_now = canvas.create_text(370, 20, text="Você acertou " + str(count) + "x", fill="lime", font=("Arial", 20))
     game = canvas.create_text(400, 300, text=" ", fill="white", font=("Arial", 40))
