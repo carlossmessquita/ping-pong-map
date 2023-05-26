@@ -12,7 +12,7 @@ class Game:
         self.root.wm_attributes("-topmost", 1)
         self.canvas = Canvas(self.root, width=800, height=600, bd=0, highlightthickness=0)
         self.canvas.pack()
-        background_image_path = ["background.png", "background-2.png"]
+        background_image_path = ["background.png", "background-2.png", "background-3.png"]
         bg_image = Image.open(random.choice(background_image_path))
         self.bg_photo = ImageTk.PhotoImage(bg_image)
         self.canvas.create_image(0, 0, image=self.bg_photo, anchor=NW)
@@ -36,11 +36,12 @@ class Game:
         self.init_game()
 
     def init_game(self):
-        self.Barra = Barra(self.canvas, "olive", self.length, self)
-        self.Bola = Bola(self.canvas, self.Barra, "white", self)
+        colors = ["red", "green", "blue", "olive", "white"]
+        self.Barra = Barra(self.canvas, random.choice(colors), self.length, self)
+        self.Bola = Bola(self.canvas, self.Barra, random.choice(colors), self)
         self.score_now = self.canvas.create_text(370, 20, text="Você acertou " + str(self.count) + "x", fill="lime",
                                                  font=("Arial", 20))
-        self.game = self.canvas.create_text(400, 300, text=" ", fill="white", font=("Arial", 40))
+        self.game = self.canvas.create_text(400, 300, text=" ", fill=random.choice(colors), font=("Arial", 40))
         self.canvas.bind_all("<Button-1>", self.start_game)
         self.start_game()
 
@@ -57,7 +58,7 @@ class Game:
         self.canvas.itemconfig(self.score_now, text="Você acertou " + str(self.count) + "x")
 
     def game_over(self):
-        self.canvas.itemconfig(self.game, text="Game over!")
+        self.canvas.itemconfig(self.game, text="Wasted!")
 
 
 class Barra:
